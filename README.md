@@ -46,7 +46,7 @@ This is the **anti-bash**. Your shell. Your rules.
 ## Getting Started
 
 ```bash
-git clone https://github.com/yourusername/py-shell.git
+git clone https://github.com/cpu-gpu-ram/Py-Shell.git
 cd py-shell
 python Py-Shell.py
 ```
@@ -108,7 +108,7 @@ Most shells were built for engineers in the 1970s. PY-SHELL is built for everyon
 
 ## Built By
 
-**Bostin King 69**
+**BostonKing69**
 
 > *"The best tool is the one you actually understand."*
 
