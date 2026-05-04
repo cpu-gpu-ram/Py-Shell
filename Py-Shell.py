@@ -6,6 +6,8 @@ import getpass
 import pathlib
 import shutil
 import datetime
+import time
+
 print("""
   ____             ____  _          _ _
  |  _ \ _   _     / ___|| |__   ___| | |
@@ -13,13 +15,13 @@ print("""
  |  __/| |_| |_____|__) | | | |  __/ | |
  |_|    \__, |    |____/|_| |_|\___|_|_|
         |____|
+V1.1
 """)
 
-
-
-print("Welcome to my python based shell translator!" \
-"\nThis program will translate your shell commands into python code." \
+print("Welcome to Py-Shell!" \
+"\nThis program will translate your commands into shell/bash." \
     "\nType 'exit' to quit the program.")
+
 def list_files():
     files = os.listdir('.')
     for file in files:
@@ -88,11 +90,10 @@ def show_file_tree():
         for file in files:
             print(f"{subindent}{file}")
 def show_disk_usage():
-   if shutil.disk_usage('.'):
-        total, used, free = shutil.disk_usage('.')
-        print(f"Total: {total // (2**30)} GB")
-        print(f"Used: {used // (2**30)} GB")
-        print(f"Free: {free // (2**30)} GB")
+    total, used, free = shutil.disk_usage('.')
+    print(f"Total: {total // (2**30)} GB")
+    print(f"Used: {used // (2**30)} GB")
+    print(f"Free: {free // (2**30)} GB")
 def search_files(keyword):
     found = False
     for root, dirs, files in os.walk('.'):
@@ -104,7 +105,6 @@ def search_files(keyword):
         print(f"No files found matching '{keyword}'.")
 def fakefastfetch():
     print("Fetching data...")
-    import time
     time.sleep(2)
     print("Data fetched successfully!")
     print(platform.platform())
@@ -122,7 +122,7 @@ def fakefastfetch():
 def log_history():
     print(history)
 def peek(file_name):
-    try: 
+    try:
         print(open(file_name).read())
     except FileNotFoundError:
         print(f"File {file_name} not found.")
@@ -141,54 +141,64 @@ def file_info(file_name):
         elif sizeinbytes < 2**30:
             print(f"File size: {sizeinbytes // 2**20} MB")
         else:
-            print(f"File size: {sizeinbytes // 2**30} GB")  
+            print(f"File size: {sizeinbytes // 2**30} GB")
         print(f"File created: {datetime.datetime.fromtimestamp(file_path.stat().st_ctime)}")
         print(f"File modified: {datetime.datetime.fromtimestamp(file_path.stat().st_mtime)}")
     except FileNotFoundError:
         print(f"File {file_name} not found.")
 def help():
-	print("""
-	Listing all commands:
-	ls
-	mkdir
-	cd
-	rmdir
-	cp
-	mv
-	rm
-	programs
-	check to wiki for more.""")
+    print("""
+    Listing all commands:
+    ls / list files
+    mkdir / make directory
+    cd / change directory
+    rmdir / remove directory
+    cp / copy file
+    mv / move file
+    rm / delete file
+    programs
+    pwd / where am i
+    whoami
+    clear
+    tree
+    disk usage
+    search
+    fetch / sysinfo
+    history
+    peek / cat
+    date / time
+    file info
+    ping
+    help
+    exit
+    """)
 def Ping(ipdomain):
-    print('-'*60)
+    print('-' * 60)
     if not ipdomain or ' ' in ipdomain or '.' not in ipdomain:
-        print ('INVALID INPUT TRY AGIAN.')
-        print('-'*60)
+        print('INVALID INPUT TRY AGAIN.')
+        print('-' * 60)
+        return
+    if not sys.platform.startswith('win'):
+        flag = '-c'
     else:
-        return1 = True
-        if not sys.platform.startswith('win'):
-            flag = '-c'
-        else:
-            flag = '-n'
-        pingcommand =  ['ping' , flag, '1', ipdomain]
-        result = subprocess.run(pingcommand, capture_output=True, text=True)
-        if return1 == True:
-            print (result.stdout)
-        else:
-            print ('cant reach')
+        flag = '-n'
+    pingcommand = ['ping', flag, '1', ipdomain]
+    result = subprocess.run(pingcommand, capture_output=True, text=True)
+    print(result.stdout)
+
 history = []
 
 print("Enter a shell command: ")
 while True:
     command = input()
     command = command.lower()
-   
     history.append(command)
     if command == 'exit':
         print("Exiting the program. Goodbye!")
         break
     elif command == 'ls' or command == 'list files' or command == 'list all files' or command == 'files' or command == 'current files':
         list_files()
-    elif command == 'cd' or command == 'change directory' or command == 'change dir' or command == 'cd to' or command == 'change to' or command == 'go to' or command == 'go to directory' or command == 'go to dir' or command == 'go to folder' or command == 'change folder' :
+    elif command == 'cd' or command == 'change directory' or command == 'change dir' or command == 'cd to' or command == 'change to' or command == 'go to' or command == 'go to directory' or command == 'go to dir' or command == 'go to folder' or command == 'change folder':
         path = input("Enter the directory path: ")
         change_directory(path)
     elif command == 'mkdir' or command == 'make directory' or command == 'create directory' or command == 'make dir' or command == 'create dir' or command == 'new directory' or command == 'new dir' or command == 'new folder' or command == 'create folder' or command == 'make folder':
@@ -216,18 +226,18 @@ while True:
         where_am_i()
     elif command == 'whoami' or command == 'who am i' or command == 'current user' or command == 'user':
         who_am_i()
-    elif command == 'clear' or command == 'clear screen' or command == 'cls'or command == 'clear console' or command == 'clear terminal'or command == 'blank':
+    elif command == 'clear' or command == 'clear screen' or command == 'cls' or command == 'clear console' or command == 'clear terminal' or command == 'blank':
         clear_screen()
     elif command == 'tree' or command == 'show file tree' or command == 'file tree' or command == 'directory tree' or command == 'dir tree' or command == 'folder tree':
         show_file_tree()
-    elif command == 'disk usage' or command == 'show disk usage' or command == 'disk space' or command == 'show disk space' or command == 'df':
+    elif command == 'disk usage' or command == 'show disk usage' or command == 'disk space' or command == 'show disk space' or command == 'df' or command == 'disk' or command == 'space':
         show_disk_usage()
     elif command == 'search' or command == 'search files' or command == 'find files' or command == 'find file' or command == 'search file':
         keyword = input("Enter the keyword to search for: ")
         search_files(keyword)
-    elif command == 'fetch' or command == 'fakefetch' or command == 'fake fast fetch' or command == 'fastfetch' or command == 'sysinfo' or command == 'system info' or command == 'system information'or command == 'fff':
+    elif command == 'fetch' or command == 'fakefetch' or command == 'fake fast fetch' or command == 'fastfetch' or command == 'sysinfo' or command == 'system info' or command == 'system information' or command == 'fff':
         fakefastfetch()
-    elif command == 'history' or command == 'log history' or command == 'show history' or command == 'command history' or command == 'history log'or command == 'log':
+    elif command == 'history' or command == 'log history' or command == 'show history' or command == 'command history' or command == 'history log' or command == 'log':
         log_history()
     elif command == 'peek' or command == 'peek file' or command == 'show file' or command == 'cat' or command == 'type' or command == 'read' or command == 'read file' or command == 'show contents' or command == 'show file contents' or command == 'show contents of file':
         file_name = input("Enter the file name: ")
@@ -240,8 +250,8 @@ while True:
     elif command == 'help' or command == 'save me please' or command == 'remind me':
         help()
     elif command == 'ping' or command == 'connect':
-        ipdomain = input('enter ip/domain ')
+        ipdomain = input('Enter ip/domain: ')
         Ping(ipdomain)
-        print('-'*60)
+        print('-' * 60)
     else:
         print("Command not recognized. Please try again.")
