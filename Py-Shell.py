@@ -313,15 +313,19 @@ def calc():
 	op = input('operation + - * / = ')
 	if op == '+':
 		ans = (A + B)
+	  	print (f'Answer is {ans}')
 	elif op == '-':
 			ans = (A - B)
+		print (f'Answer is {ans}')
 	elif op == '/': 
 		ans = (A / B)
+		print (f'Answer is {ans}')
 	elif op == '*': 
 		ans = (A * B)
+		print (f'Answer is {ans}')
 	else:
 		print ('invalid input')
-	print (f'Answer is {ans}')
+	
 
 
 #defines all previous commands
