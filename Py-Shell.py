@@ -313,9 +313,9 @@ def calc():
 	op = input('operation + - * / = ')
 	if op == '+':
 		ans = (A + B)
-	  	print (f'Answer is {ans}')
+		print (f'Answer is {ans}')
 	elif op == '-':
-			ans = (A - B)
+		ans = (A - B)
 		print (f'Answer is {ans}')
 	elif op == '/': 
 		ans = (A / B)
