@@ -20,7 +20,7 @@ print(r"""
  |  __/| |_| |_____|__) | | | |  __/ | |
  |_|    \__, |    |____/|_| |_|\___|_|_|
         |____|
-V2.0
+V2.1
 
 """)
 #greets the user
@@ -30,14 +30,16 @@ print(f"Welcome to Py-Shell! , {getpass.getuser()}" \
     "\nType 'exit' to quit the program.")
 
 #list all files in the directory 
-def list_files():
+def ls():
     files = os.listdir('.')
     for file in files:
         print(file)
 
 #changes the directory (needs to be updated) for one line cmd with out losing compatablity for thee old way 
 
-def change_directory(path):
+def cd(path =None):
+    if path is None:
+        path = input('What directory/path ?')
     try:
         os.chdir(path)
         print(f"Changed directory to {path}")
@@ -46,7 +48,9 @@ def change_directory(path):
 
 #makes new directory needs to be updated for one line cmd
 
-def make_directory(path):
+def mkdir(path =None):
+    if path is None:
+        path = input("What's the name ?")
     try:
         os.mkdir(path)
         print(f"Directory {path} created.")
@@ -55,7 +59,9 @@ def make_directory(path):
 
 #deletes an empty directory need to update so it can delete a full directory in one cmd
 
-def remove_directory(path):
+def rmdir(path =None):
+    if path is None:
+        path = input("What's the name ?")
     try:
         os.rmdir(path)
         print(f"Directory {path} removed.")
@@ -66,7 +72,10 @@ def remove_directory(path):
 
 #copies file need to update for one cmd to copy
 
-def copy_file(src, dst):
+def cp(src =None, dst =None):
+    if src is None:
+        src = input("What's the name ?")
+        dst = input("What the desintation ? (path/folder name)")
     try:
         shutil.copy(src, dst)
         print(f"File {src} copied to {dst}.")
@@ -75,7 +84,11 @@ def copy_file(src, dst):
 
 #moves file need to update for one cmd to copy
 
-def move_file(src, dst):
+def mv(src =None, dst =None):
+    if src is None:
+        src = input("What's the name ?")
+        dst = input("What the desintation ? (path/folder name)")
+
     try:
         shutil.move(src, dst)
         print(f"File {src} moved to {dst}.")
@@ -84,7 +97,10 @@ def move_file(src, dst):
 
 #removes file need to update for one cmd to copy
 
-def remove_file(path):
+def rm(path =None):
+    if path is None:
+        path = input("What's the name ?")
+
     try:
         os.remove(path)
         print(f"File {path} removed.")
@@ -98,10 +114,6 @@ def yes():
     while True:
         print(usr_input)
 
-#output current users directory
-
-def where_am_i():
-    print(f"Current working directory: {os.getcwd()}")
 
 #outputs uername
 
@@ -110,7 +122,7 @@ def who_am_i():
 
 #clears terminal
 
-def clear_screen():
+def clr():
     if sys.platform.startswith('win'):
         os.system('cls')
     else:
@@ -118,7 +130,7 @@ def clear_screen():
 
 #outputs current user directorys file tree
 
-def show_file_tree():
+def file_tree():
     for root, dirs, files in os.walk('.'):
         level = root.replace(os.getcwd(), '').count(os.sep)
         indent = ' ' * 4 * level
@@ -129,7 +141,7 @@ def show_file_tree():
 
 #Shows disk space
 
-def show_disk_usage():
+def disk():
    if shutil.disk_usage('.'):
         total, used, free = shutil.disk_usage('.')
         print(f"Total: {total // (2**30)} GB")
@@ -138,7 +150,10 @@ def show_disk_usage():
 
 #search current directory for keyword
 
-def search_files(keyword):
+def search(keyword =None):
+    if keyword is None:
+        keyword = input("What we looking for boss ? ")
+
     found = False
     for root, dirs, files in os.walk('.'):
         for file in files:
@@ -150,7 +165,7 @@ def search_files(keyword):
 
 #fetchs system info
 
-def fakefastfetch():
+def fff():
     print("Fetching data...")
     time.sleep(2)
     print("Data fetched successfully!")
@@ -169,12 +184,15 @@ def fakefastfetch():
 
 #command history
 
-def log_history():
+def log():
     print(history)
 
 #reads out files
 
-def peek(file_name):
+def peek(file_name =None):
+    if file_name is None:
+        file_name = input("What's the name ?")
+
     try: 
         print(open(file_name).read())
     except FileNotFoundError:
@@ -183,13 +201,16 @@ def peek(file_name):
 #get system date and time
 
 
-def current_date_time():
+def date():
     now = datetime.datetime.now()
     print(f"Current date and time: {now}")
 
 #Shows basic info about a file
 
-def file_info(file_name):
+def file_info(file_name =None):
+    if file_name is None:
+        file_name = input("What's the name ?")
+
     try:
         file_path = pathlib.Path(file_name)
         print(f"File name: {file_path.name}")
@@ -210,21 +231,59 @@ def file_info(file_name):
 #Should print all commands
 
 def help():
-	print("""
-	Listing all commands:
-	ls
-	mkdir
-	cd
-	rmdir
-	cp
-	mv
-	rm
-	programs
-	check to wiki for more.""")
+    print("""
+    ============ PY-SHELL COMMANDS ============
+
+    FILE MANAGEMENT
+    ls / list files / files       - list files in current directory
+    cd / change directory         - change directory
+    mkdir / make folder           - create new directory
+    rmdir / remove directory      - delete empty directory
+    cp / copy                     - copy a file
+    mv / move / rename            - move or rename a file
+    rm / remove / destroy         - delete a file
+    tree / file tree              - show directory tree
+
+    FILE VIEWING
+    peek / cat                    - read a text file
+    file info                     - show file size and dates
+    search                        - search for files by name
+
+    SYSTEM
+    fff / fakefastfetch           - show system info
+    disk / space                  - show disk usage
+    who am i / identity           - show current user
+    time                          - show current date and time
+    clr / clear                   - clear the screen
+
+    NETWORK
+    ping / connect                - ping an ip or domain
+
+    PROGRAMS
+    lp / programs / list programs - list all programs
+    run / run program             - run a program by number
+
+    ARCHIVE
+    zip / archive                 - zip a folder
+    unzip / unarchive             - extract a zip file
+
+    MISC
+    calc                          - basic calculator
+    log / history                 - show command history
+    !! / last command             - repeat last command
+    yes / repeat / loop           - repeat input forever
+    help / sos / save me          - show this menu
+    exit                          - quit Py-Shell
+
+    ===========================================
+    """)
 
 #checks if a site/ip is up
 
-def Ping(ipdomain):
+def Ping(ipdomain =None):
+    if ipdomain is None:
+        ipdomain = input("What's the name ?")
+
     print('-'*60)
     if not ipdomain or ' ' in ipdomain or '.' not in ipdomain:
         print ('INVALID INPUT TRY AGIAN.')
@@ -245,7 +304,7 @@ def Ping(ipdomain):
 
 #my alternative to the up arrow on windows
 
-def recall():
+def up():
 	last_item = history[-2]
 	print (last_item)
 
@@ -262,7 +321,7 @@ def zipfunc():
 
 #unzips a file
 
-def unzipfunc():
+def unzip():
     zip_name = input('Enter zip file name to extract: ')
     extract_dir = input('Enter folder to extract to: ')
     with zipfile.ZipFile(zip_name, 'r') as contents:
@@ -271,7 +330,7 @@ def unzipfunc():
 
 #List every exe found in usr/bin and for windows The program folder
 
-def list_programs():
+def lp():
     programs = []
 
     paths = os.environ['PATH'].split(os.pathsep)
@@ -293,7 +352,10 @@ def list_programs():
 #run anyone of the previous noted files/programs
 
 
-def run_program(programs):
+def rp(programs =None):
+    if programs is None:
+        print('sorry you hav to run "programs" first')
+        return
     try:
         number = int(input("Enter program number: "))
         program = programs[number - 1]
@@ -313,19 +375,113 @@ def calc():
 	op = input('operation + - * / = ')
 	if op == '+':
 		ans = (A + B)
-		print (f'Answer is {ans}')
 	elif op == '-':
 		ans = (A - B)
-		print (f'Answer is {ans}')
 	elif op == '/': 
 		ans = (A / B)
-		print (f'Answer is {ans}')
 	elif op == '*': 
 		ans = (A * B)
-		print (f'Answer is {ans}')
 	else:
 		print ('invalid input')
-	
+		return
+	print (f'Answer is {ans}')
+	return
+#Command dictionary
+commands = {
+#File managment 
+	'ls': ls,
+	'list files': ls,
+	'files': ls,
+	'current': ls,
+	'cd': cd,
+	'change folder': cd,
+	'change directory': cd,
+	'switch directory': cd,
+	'switch folder': cd,
+	'mkdir': mkdir,
+	'make folder': mkdir,
+	'make directory': mkdir,
+	'new folder': mkdir,
+	'new directory': mkdir,
+	'rmdir': rmdir,
+	'remove folder': rmdir,
+	'remove directory': rmdir,
+	'destroy folder': rmdir,
+	'destroy directory': rmdir,
+	'cp': cp,
+	'copy': cp,
+	'copy file': cp,
+	'copy files': cp,
+	'duplicate': cp,
+	'reproduce':cp,
+	'mv': mv,
+	'move': mv,
+	'move file': mv,
+	'move files': mv,
+	'rename': mv,
+	'transport': mv,
+	'rm': rm,
+	'remove': rm,
+	'remove file': rm,
+	'remove files': rm,
+	'destroy files': rm,
+        'destroy file': rm,
+        'destroy': rm,
+
+
+	'yes': yes,
+	'repeat': yes,
+	'loop': yes,
+	'who am i': who_am_i,
+	'identity': who_am_i,
+
+
+	'clr': clr,
+	'clear': clr,
+	'file tree': file_tree,
+        'tree': file_tree,
+
+
+	'disk': disk,
+	'space': disk,
+
+
+	'search': search,
+
+
+	'fff': fff,
+	'fake fast fetch': fff,
+        'fakefastfetch': fff,
+
+
+	'log': log,
+	'history': log,
+	'cmd': log,
+
+	'cat': peek,
+	'peek': peek,
+
+	'time': date,
+
+	'file info': file_info,
+	'help': help,
+	'sos':help,
+	'save me': help,
+	'connect':Ping,
+	'ping': Ping,
+	'!!': up,
+	'zip': zipfunc,
+	'archive': zipfunc,
+	'unzip': unzip,
+	'unarchive': unzip,
+	'programs': lp,
+	'lp': lp,
+	'list programs': lp,
+	'programs': lp,
+	'run': rp,
+	'run program': rp,
+	'calc': calc,
+}
 
 
 #defines all previous commands
@@ -342,137 +498,7 @@ while True:
     if command == 'exit':
         print("Exiting the program. Goodbye!")
         break
-
-
-    elif command == 'ls' or command == 'list files' or command == 'list all files' or command == 'files' or command == 'current files':
-        list_files()
-
-
-    elif command == 'cd' or command == 'change directory' or command == 'change dir' or command == 'cd to' or command == 'change to' or command == 'go to' or command == 'go to directory' or command == 'go to dir' or command == 'go to folder' or command == 'change folder' :
-        path = input("Enter the directory path: ")
-        change_directory(path)
-
-
-    elif command == 'mkdir' or command == 'make directory' or command == 'create directory' or command == 'make dir' or command == 'create dir' or command == 'new directory' or command == 'new dir' or command == 'new folder' or command == 'create folder' or command == 'make folder':
-        path = input("Enter the directory path: ")
-        make_directory(path)
-
-
-    elif command == 'rmdir' or command == 'remove directory' or command == 'delete directory' or command == 'remove dir' or command == 'delete dir' or command == 'delete folder' or command == 'remove folder':
-        path = input("Enter the directory path: ")
-        remove_directory(path)
-
-
-    elif command == 'cp' or command == 'copy file' or command == 'copy' or command == 'duplicate file' or command == 'duplicate':
-        src = input("Enter the source file path: ")
-        dst = input("Enter the destination file path: ")
-        copy_file(src, dst)
-
-
-    elif command == 'mv' or command == 'move file' or command == 'move' or command == 'rename file' or command == 'rename' or command == 'move to' or command == 'move file to' or command == 'move to directory' or command == 'move to dir' or command == 'move to folder' or command == 'transfer file' or command == 'transfer':
-        src = input("Enter the source file path: ")
-        dst = input("Enter the destination file path: ")
-        move_file(src, dst)
-
-
-    elif command == 'rm' or command == 'remove file' or command == 'delete file' or command == 'delete':
-        path = input("Enter the file path: ")
-        remove_file(path)
-
-
-    elif command == 'programs' or command == 'list programs' or command == 'list all programs' or command == 'available programs' or command == 'installed programs':
-        list_programs()
-
-
-    elif command == 'yes' or command == 'repeat' or command == 'echo' or command == 'print':
-        yes()
-
-
-    elif command == 'pwd' or command == 'where am i' or command == 'current directory' or command == 'current dir' or command == 'current folder':
-        where_am_i()
-
-
-    elif command == 'whoami' or command == 'who am i' or command == 'current user' or command == 'user':
-        who_am_i()
-
-
-    elif command == 'clear' or command == 'clear screen' or command == 'cls'or command == 'clear console' or command == 'clear terminal'or command == 'blank':
-        clear_screen()
-
-
-    elif command == 'tree' or command == 'show file tree' or command == 'file tree' or command == 'directory tree' or command == 'dir tree' or command == 'folder tree':
-        show_file_tree()
-
-
-    elif command == 'disk usage' or command == 'show disk usage' or command == 'disk space' or command == 'show disk space' or command == 'df':
-        show_disk_usage()
-
-
-    elif command == 'search' or command == 'search files' or command == 'find files' or command == 'find file' or command == 'search file':
-        keyword = input("Enter the keyword to search for: ")
-        search_files(keyword)
-
-
-    elif command == 'fetch' or command == 'fakefetch' or command == 'fake fast fetch' or command == 'fastfetch' or command == 'sysinfo' or command == 'system info' or command == 'system information'or command == 'fff':
-        fakefastfetch()
-
-
-    elif command == 'history' or command == 'log history' or command == 'show history' or command == 'command history' or command == 'history log'or command == 'log':
-        log_history()
-
-
-    elif command == 'peek' or command == 'peek file' or command == 'show file' or command == 'cat' or command == 'type' or command == 'read' or command == 'read file' or command == 'show contents' or command == 'show file contents' or command == 'show contents of file':
-        file_name = input("Enter the file name: ")
-        peek(file_name)
-
-
-    elif command == 'date' or command == 'time' or command == 'current date and time' or command == 'current time' or command == 'current date':
-        current_date_time()
-
-
-    elif command == 'file info' or command == 'file information' or command == 'show file info' or command == 'show file information' or command == 'file details' or command == 'show file details':
-        file_name = input("Enter the file name: ")
-        file_info(file_name)
-
-
-    elif command == 'help' or command == 'save me please' or command == 'remind me':
-        help()
-
-
-    elif command == 'ping' or command == 'connect':
-        ipdomain = input('enter ip/domain ')
-        Ping(ipdomain)
-        print('-'*60)
-
-
-    elif command == 'disk' or command == 'space':
-        show_disk_usage()
-
-
-
-    elif command == '!!' or command == 'last command':
-        recall()
-
-
-    elif command == 'zip' or command == 'archive':
-        zipfunc()
-
-
-    elif command == 'unzip' or command == 'unarchive':
-        unzipfunc()
-
-
-    elif command == 'programs' or command == 'list programs':
-        program_list = list_programs()
-
-
-    elif command == 'run' or command == 'run program':
-        run_program(program_list)
-        program_list = list_programs()
-
-
-    elif command == 'calc':
-        calc()
-
+    elif command in commands:
+        commands[command]() 
     else:
         print("Command not recognized. Please try again.")
