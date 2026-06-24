@@ -10,12 +10,13 @@ Py-Shell is a Python-powered terminal shell designed to be the "anti-bash." Inst
 
 1. **Copy and paste in bash terminal**
    ```bash
-   git clone [https://github.com/cpu-gpu-ram/Py-Shell](https://github.com/cpu-gpu-ram/Py-Shell)
+   git clone https://github.com/cpu-gpu-ram/Py-Shell
    cd Py-Shell
+   chomd +x Py-Shell
    ./Py-Shell
   
-```
-```
+
+
 
 ## Our Evolution: From Prototype to Power
 
